@@ -1,9 +1,9 @@
-# Your Project Title Here
-Name: Your Full Name
+# Nearest Resturant Finder
+Sulav Malla
 
-CollegeID: Your College ID
+150179/9637939
 
-Batch: Jan19A/B/C/D?
+Batch: Jan19D
 
 Brief description of the domain of your project!
 
