@@ -12,18 +12,21 @@ const multer=require("multer");
 
 router.post("/registeruser",(req,res)=>
 {
-    const user=new User({
-        Fname:req.body.firstname,
-        Lname:req.body.lastname,
-        Username:req.body.uname,
-        Password:req.body.password,
-        Address:req.body.address,
-        ProfilePic:req.body.profilepic,
-        Age:req.body.age
-        });
+    console.log(req.body);
+
+    const user=new User(req.body
+        // Fname:req.body.firstname,
+        // Lname:req.body.lastname,
+        // Username:req.body.uname,
+        // Password:req.body.password,
+        // Address:req.body.address,
+        // ProfilePic:req.body.profilepic,
+        // Age:req.body.age
+        );
     user
     .save()
     .then(result=>{
+        
         console.log(result);
         res.status(201).json({
         message:"User Registered successfully",
