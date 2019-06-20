@@ -14,15 +14,7 @@ router.post("/registeruser",(req,res)=>
 {
     console.log(req.body);
 
-    const user=new User(req.body
-        // Fname:req.body.firstname,
-        // Lname:req.body.lastname,
-        // Username:req.body.uname,
-        // Password:req.body.password,
-        // Address:req.body.address,
-        // ProfilePic:req.body.profilepic,
-        // Age:req.body.age
-        );
+    const user=new User(req.body);
     user
     .save()
     .then(result=>{
