@@ -8,6 +8,9 @@ const userSchema=mongoose.Schema({
     Lname:{
         type:String
     },
+    Email:{
+        type:String
+    },
     Username:{
         type:String
     },
@@ -17,11 +20,14 @@ const userSchema=mongoose.Schema({
     Address:{
         type: String
     },
-    ProfilePic:{
-        type:String
+    Usertype:{
+        type: String
     },
     Age:{
-        type:Number
+        type:String
+    },
+    ProfilePic:{
+        type:String
     },
     tokens:[{
         token:{
@@ -35,7 +41,14 @@ userSchema.statics.checkCredentialsDb=async(Username,Password)=>
 {
   
     const user1=await User.findOne({Username:Username,Password:Password})
-    return user1;
+    if(user1){
+                console.log(user1);
+                return user1;
+    }
+    else{
+console.log("not found")
+return;
+    }
 
 }
 

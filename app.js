@@ -12,12 +12,15 @@ app.use(express.json());
 app.use(bodyParser.urlencoded({extended:false}));
 app.use(bodyParser.json());
 require('./DB/mongoose');
+app.use('/location',express.static('./location'));
+
 
 const userRoute=require('./Routes/user');
-// const server = require('./server');
+const restaurantRoute = require('./Routes/restaurant');
+
 
 app.use('/users',userRoute);
-//app.use(server);
+app.use('/restaurants',restaurantRoute);
+
 module.exports=app;
 
-//  app.listen(3100);
