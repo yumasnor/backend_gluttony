@@ -6,6 +6,7 @@ const Auth = require('../Middleware/auth');
 const path = require('path');
 const multer=require("multer");
 
+
 // router.use(express.static(path.join(__dirname,'UserImg')))
 //registration 
 router.post("/registeruser",(req,res)=>
@@ -67,7 +68,6 @@ router.post('/logout', Auth, async (req,res) =>{
 router.get("/showuser",Auth,function(req,res){
    User.find().then(function(User){
         console.log(User);
-        // res.json(houseModel);
         res.send(User);
     }).catch(function(e){
         res.send(e);
@@ -75,13 +75,14 @@ router.get("/showuser",Auth,function(req,res){
 })    
 
 //user update
-router.put('/updateuser/:id',function(req,res){
-    userid = req.param.id.toString();
-    console.log(userid);
+router.put('/updateuser',function(req,res){
+    // userid = req.param.id.toString();
+    uid = req.body._id;
+    console.log(req.body._id);
+    // console.log(userid);
     console.log(req.body);
     User.findByIdAndUpdate(uid,req.body,{new: true}, (err,User) => {
-        // Handle any possible database errors
-        res.send(User);
+    res.send(User);
         });
     })
 
@@ -93,24 +94,21 @@ var storage = multer.diskStorage({
         callback(null, 'User' + Date.now() + ext);
     }
 });
-
 var imageFileFilter = (req, file, cb) => {
     if (!file.originalname.match(/\.(jpg|JPG|jpeg|png|gif)$/)) {
         return cb(new Error('You can upload only image files!'), false);
     }
     cb(null, true);
 };
-
 var upload = multer({
     storage: storage,
     fileFilter: imageFileFilter,
     limits: { fileSize: 1000000 }
 });
-
-
-    router.post('/uploadImg', upload.single('imageFile'), (req, res) => {
+router.post('/uploadImg', upload.single('imageFile'), (req, res) => {
        res.send(req.file)
         });
+
 
 router.get('/this',Auth,function(req,res){
     res.send(req.user);

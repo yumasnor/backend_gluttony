@@ -6,6 +6,7 @@ const path=require('path');
 const multer=require('multer');
 // app.use(bodyParser.json());
 const morgan=require('morgan');
+const fs= require('fs');
 
 app.use(cors());
 app.use(express.json());
@@ -21,6 +22,7 @@ const restaurantRoute = require('./Routes/restaurant');
 
 app.use('/users',userRoute);
 app.use('/restaurants',restaurantRoute);
+
 
 module.exports=app;
 

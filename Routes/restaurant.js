@@ -3,6 +3,7 @@ const router=express.Router();
 const Restaurant=require("../model/Restaurant");
 const mongoose=require("mongoose");
 const multer=require("multer");
+const Auth = require('../Middleware/auth');
 const path=require('path');
 require('../DB/mongoose');
 
@@ -59,5 +60,27 @@ var upload = multer({
         })
     })
 })
+
+// show restaurant details
+router.get("/showrestaurent",Auth,function(req,res){
+  Restaurant.find().then(function(Restaurant){
+      console.log(Restaurant);
+      // res.json(houseModel);
+      res.send(Restaurant);
+  }).catch(function(e){
+      res.send(e);
+  })
+})
+
+//delete restaurant details
+router.delete('/deleterestaurant/:id',Auth, function (req, res) {    
+            
+  console.log(req.params.id);
+   Restaurant.findByIdAndDelete(req.params.id).then(function(){
+       res.send("Successfully deleted");
+   }).catch(function(e){
+       res.send(e);
+   }) ;
+   });
   module.exports=router;
 
