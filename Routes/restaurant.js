@@ -82,5 +82,34 @@ router.delete('/deleterestaurant/:id',Auth, function (req, res) {
        res.send(e);
    }) ;
    });
+
+//update restaurant details
+router.put('/updaterestaurant',function(req,res){
+  // userid = req.param.id.toString();
+  uid = req.body._id;
+  console.log(req.body._id);
+  // console.log(userid);
+  console.log(req.body);
+  Restaurant.findByIdAndUpdate(uid,req.body,{new: true}, (err,User) => {
+  res.send(User);
+      });
+  });
+
+  router.get("/showonerestaurent/:id",Auth,function(req,res){
+    rid=req.params.id.toString();
+    Restaurant.findById(rid).then(function(Restaurant){
+        console.log(Restaurant);
+        // res.json(houseModel);
+        res.json(Restaurant);
+    }).catch(function(e){
+        res.send(e);
+    })
+  })
+  
+  router.get('/this',Auth,function(req,res){
+    res.send(req.resta);
+})
+
+
   module.exports=router;
 

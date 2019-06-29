@@ -14,6 +14,7 @@ app.use(bodyParser.urlencoded({extended:false}));
 app.use(bodyParser.json());
 require('./DB/mongoose');
 app.use('/location',express.static('./location'));
+app.use(express.static("./ProfilePicture"));
 
 
 const userRoute=require('./Routes/user');

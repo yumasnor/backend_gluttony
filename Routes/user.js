@@ -3,12 +3,12 @@ const router=express.Router();
 const User=require("../model/User");
 const mongoose=require("mongoose");
 const Auth = require('../Middleware/auth');
+const Comment=require('../model/Comment');
 const path = require('path');
 const multer=require("multer");
 
 
-// router.use(express.static(path.join(__dirname,'UserImg')))
-//registration 
+//REGISTRATION
 router.post("/registeruser",(req,res)=>
 {
     console.log(req.body);
@@ -33,7 +33,7 @@ router.post("/registeruser",(req,res)=>
     })
 })
 
-//login
+//LOGIN
 router.post("/Login",async function (req,res)
 {
     
@@ -53,7 +53,7 @@ else{
 }
 })
 
-//log out
+//LOG OUT
 router.post('/logout', Auth, async (req,res) =>{
     try {
         req.user.tokens = [];
@@ -64,7 +64,7 @@ router.post('/logout', Auth, async (req,res) =>{
         }
        });
 
-//show all user
+//SHOW USER
 router.get("/showuser",Auth,function(req,res){
    User.find().then(function(User){
         console.log(User);
@@ -74,7 +74,7 @@ router.get("/showuser",Auth,function(req,res){
     })   
 })    
 
-//user update
+//USER UPDATE
 router.put('/updateuser',function(req,res){
     // userid = req.param.id.toString();
     uid = req.body._id;
@@ -86,7 +86,7 @@ router.put('/updateuser',function(req,res){
         });
     })
 
-//upload profile picture
+//UPLOAD PROFILE PICTURE
 var storage = multer.diskStorage({
     destination: 'ProfilePicture',
     filename: (req, file, callback) => {
@@ -109,6 +109,56 @@ router.post('/uploadImg', upload.single('imageFile'), (req, res) => {
        res.send(req.file)
         });
 
+//SHOW ALL USERS
+router.get("/alluser",Auth,function(req,res){
+    User.find().then(function(User){
+        console.log(User);
+        // res.json(houseModel);
+        res.send(User);
+    }).catch(function(e){
+        res.send(e);
+    })
+  })
+
+//DELETE USER        
+router.delete('/deleteuser/:id',Auth, function (req, res) {    
+    
+    console.log(req.params.id);
+        User.findByIdAndDelete(req.params.id).then(function(){
+            res.send("Successfully deleted");
+        }).catch(function(e){
+            res.send(e);
+        }) ;
+        });        
+
+//Comment
+router.post('/comment',(req,res)=>{
+    User.findOne({
+        _id: req.body._id
+    },function(err,user){
+        if(user.Username==req.body.Username){
+            var comment = new Comment();
+
+            comment.RestaurantID = req.body.RestaurantID;
+            comment.Review = req.body.Review;
+            comment.User = req.body.Username;
+
+            comment.save((err,doc)=>{
+                if(err){
+                    console.log('Error');
+                 
+                }
+                else {
+                    res.json('Success');
+                }
+            })
+            
+        }
+        else{
+            res.json('failed');
+        }
+    })
+})        
 
 router.get('/this',Auth,function(req,res){
     res.send(req.user);
