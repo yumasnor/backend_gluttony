@@ -13,7 +13,7 @@ app.use(express.json());
 app.use(bodyParser.urlencoded({extended:false}));
 app.use(bodyParser.json());
 require('./DB/mongoose');
-app.use('/location',express.static('./location'));
+app.use('/logo',express.static('./logo'));
 app.use(express.static("./ProfilePicture"));
 
 

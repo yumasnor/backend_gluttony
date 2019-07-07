@@ -4,17 +4,19 @@ const Restaurant=require("../model/Restaurant");
 const mongoose=require("mongoose");
 const multer=require("multer");
 const Auth = require('../Middleware/auth');
+const Comment=require('../model/Comment');
 const path=require('path');
+const async=require('async');
 require('../DB/mongoose');
 
 
 
-//image upload
+//UPLOAD LOCATION
 var storage = multer.diskStorage({
-  destination: 'location',
+  destination: 'logo',
   filename: (req, file, callback) => {
       let ext = path.extname(file.originalname);
-      callback(null, "Location" + Date.now() + ext);
+      callback(null, "Logo" + Date.now() + ext);
   }
 });
 
@@ -31,7 +33,7 @@ var upload = multer({
   limits: { fileSize: 100000000 }
 });
 
-  router.post('/uploadlocation', upload.single('imageFile'), (req, res) => {
+  router.post('/uploadlogo', upload.single('imageFile'), (req, res) => {
       res.send(req.file.filename)
       console.log(req.file)
   });
@@ -84,23 +86,20 @@ router.delete('/deleterestaurant/:id',Auth, function (req, res) {
    });
 
 //update restaurant details
-router.put('/updaterestaurant',function(req,res){
-  // userid = req.param.id.toString();
-  uid = req.body._id;
+router.put('/updaterestaurant/:id',function(req,res){
+   uid = req.body._id;
   console.log(req.body._id);
-  // console.log(userid);
-  console.log(req.body);
-  Restaurant.findByIdAndUpdate(uid,req.body,{new: true}, (err,User) => {
-  res.send(User);
+   console.log(req.body);
+  Restaurant.findByIdAndUpdate(uid,req.body,{new: true}, (err,Restaurant) => {
+  res.send(Restaurant);
       });
   });
 
-  router.get("/showonerestaurent/:id",Auth,function(req,res){
-    rid=req.params.id.toString();
-    Restaurant.findById(rid).then(function(Restaurant){
-        console.log(Restaurant);
-        // res.json(houseModel);
-        res.json(Restaurant);
+  router.get("/showonerestaurent/:id",function(req,res){
+    id=req.params.id.toString();
+    Restaurant.findById(id).then(function(restaurant){
+        console.log(restaurant);
+        res.send(restaurant);
     }).catch(function(e){
         res.send(e);
     })
@@ -109,6 +108,40 @@ router.put('/updaterestaurant',function(req,res){
   router.get('/this',Auth,function(req,res){
     res.send(req.resta);
 })
+
+//TABLE BOOKING
+router.get('/restroreview/:id', (req, res) => {
+  var locals= {};
+  async.parallel([
+  //Load user Data
+  function(callback) {
+  Restaurant.findById(req.params.id,function(err,restaurant){
+  if (err) return callback(err);
+  locals.restaurant = restaurant;
+  callback();
+  });
+  },
+  //Load posts Data
+  function(callback) {
+  Comment.find({RestaurantID: req.params.id},function(err,comment){
+  if (err) return callback(err);
+  locals.comment = comment;
+  console.log(comment);
+  callback();
+  }).sort({'_id': -1});
+  }
+  ], function(err) { 
+  if (err) return ("Error");
+  res.json( {
+  restaurant: locals.restaurant,
+  comment: locals.comment
+  });
+  });
+  console.log(locals.comment);
+  
+  });
+  
+  
 
 
   module.exports=router;

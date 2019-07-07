@@ -4,8 +4,10 @@ const User=require("../model/User");
 const mongoose=require("mongoose");
 const Auth = require('../Middleware/auth');
 const Comment=require('../model/Comment');
+const Reservation=require('../model/Reservation');
 const path = require('path');
 const multer=require("multer");
+
 
 
 //REGISTRATION
@@ -19,10 +21,7 @@ router.post("/registeruser",(req,res)=>
     .then(result=>{
         
         console.log(result);
-        res.status(201).json({
-        message:"User Registered successfully",
-
-        })
+        res.status(201).json("User Registered successfully")
     })
     .catch(err=>{
         res.status(500).json({
@@ -43,8 +42,12 @@ router.post("/Login",async function (req,res)
     const user=await User.checkCredentialsDb(enteredUname,enteredpass);
     if(user){
     const token=await user.generateAuthToken();
-    res.send({
+    res.json({
         token:token,
+        Username:enteredUname,
+        Password:enteredpass,
+        _id:user._id,
+        user:user.Username,
         userType:user.Usertype
     });
 }
@@ -133,15 +136,11 @@ router.delete('/deleteuser/:id',Auth, function (req, res) {
 
 //Comment
 router.post('/comment',(req,res)=>{
-    User.findOne({
-        _id: req.body._id
-    },function(err,user){
-        if(user.Username==req.body.Username){
             var comment = new Comment();
 
             comment.RestaurantID = req.body.RestaurantID;
             comment.Review = req.body.Review;
-            comment.User = req.body.Username;
+            comment.User = req.body.User;
 
             comment.save((err,doc)=>{
                 if(err){
@@ -152,13 +151,17 @@ router.post('/comment',(req,res)=>{
                     res.json('Success');
                 }
             })
-            
-        }
-        else{
-            res.json('failed');
-        }
-    })
-})        
+    });      
+
+router.post('/bookTable',Auth,function(req,res){
+    var reservationData = new Reservation({...req.body,userId:req.user._id});
+    reservationData.save().then(function(){
+        res.send('Table Reserved'); 
+    }).catch(function(e){
+
+    });
+    console.log(req.body);
+})
 
 router.get('/this',Auth,function(req,res){
     res.send(req.user);

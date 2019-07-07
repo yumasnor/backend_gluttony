@@ -1,16 +1,26 @@
 const mongoose=require("mongoose");
 
 const restSchema = mongoose.Schema({
+
+    Restaurantlogo:{
+        type:String,
+    },
     Restaurantname:{
         type:String
     },
     Restauranttype:{
         type:String
     },
-    Restaurantlocation:{
-        type:String
+    Restaurantdesc:{
+        type:String,
     },
     Restaurantcontact:{
+        type:String
+    },
+    Longitude:{
+        type:String
+    },
+    Latitude:{
         type:String
     }
 });
