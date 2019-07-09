@@ -68,9 +68,9 @@ router.get("/showrestaurent",Auth,function(req,res){
   Restaurant.find().then(function(Restaurant){
       console.log(Restaurant);
       // res.json(houseModel);
-      res.send(Restaurant);
+      res.json(Restaurant);
   }).catch(function(e){
-      res.send(e);
+      res.json(e);
   })
 })
 
