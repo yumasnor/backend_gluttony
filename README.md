@@ -15,4 +15,5 @@ Reviews for User
 List out your main APIs and its sample input and output!
 The routes has been created for user and restaurant.
 API of mapbox is also being used for location.
-
+![rest_API](https://user-images.githubusercontent.com/48817733/60867040-9a817b00-a249-11e9-9c8a-e884963c6962.JPG)
+![user_API](https://user-images.githubusercontent.com/48817733/60867041-9a817b00-a249-11e9-82f8-6edc199b9151.JPG)
